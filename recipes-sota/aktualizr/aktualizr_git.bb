@@ -8,6 +8,7 @@ LIC_FILES_CHKSUM = "file://${S}/LICENSE;md5=9741c346eef56131163e13b9db1241b3"
 DEPENDS = "boost curl openssl libarchive libsodium asn1c-native sqlite3 "
 DEPENDS_append_class-target = "ostree ${@bb.utils.contains('SOTA_CLIENT_FEATURES', 'hsm', ' libp11', '', d)} "
 DEPENDS_append_class-native = "glib-2.0-native "
+DEPENDS_append = "${@bb.utils.contains('PTEST_ENABLED', '1', ' coreutils-native ostree-native aktualizr-native ', '', d)}"
 
 RDEPENDS_${PN}_class-target = "lshw "
 RDEPENDS_${PN}_append_class-target = "${@bb.utils.contains('SOTA_CLIENT_FEATURES', 'serialcan', ' slcand-start', '', d)} "
@@ -21,6 +22,7 @@ PR = "7"
 
 SRC_URI = " \
   gitsm://github.com/advancedtelematic/aktualizr;branch=${BRANCH} \
+  file://0001-Use-aktualizr-repo-without-a-provided-path.patch \
   file://aktualizr.service \
   file://aktualizr-secondary.service \
   file://aktualizr-secondary.socket \
@@ -32,9 +34,7 @@ BRANCH ?= "master"
 
 S = "${WORKDIR}/git"
 
-inherit cmake
-
-inherit systemd
+inherit cmake systemd ptest
 
 SYSTEMD_PACKAGES = "${PN} ${PN}-secondary"
 SYSTEMD_SERVICE_${PN} = "aktualizr.service"
@@ -55,6 +55,10 @@ EXTRA_OECMAKE_append_class-native = " -DBUILD_SOTA_TOOLS=ON \
                                       -DBUILD_SYSTEMD=OFF \
                                       -DGARAGE_SIGN_VERSION=${GARAGE_SIGN_VERSION} \
                                       -DGARAGE_SIGN_SHA256=${GARAGE_SIGN_SHA256}"
+
+do_compile_ptest() {
+    cmake_runcmake_build --target build_tests
+}
 
 do_install_append () {
     install -d ${D}${libdir}/sota

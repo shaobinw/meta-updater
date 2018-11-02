@@ -1,0 +1,24 @@
+From f5a501f842749ba31f76526a395f09cc61435ec3 Mon Sep 17 00:00:00 2001
+From: Patrick Vacek <patrickvacek@gmail.com>
+Date: Wed, 31 Oct 2018 14:55:48 +0100
+Subject: [PATCH] Use aktualizr-repo without a provided path.
+
+This is necessary for building the tests for ptest because we want to
+use the native version of aktualizr-repo (built for the host).
+---
+ tests/uptane_repo_generation/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tests/uptane_repo_generation/CMakeLists.txt b/tests/uptane_repo_generation/CMakeLists.txt
+index 83c14230..6f89d6a5 100644
+--- a/tests/uptane_repo_generation/CMakeLists.txt
++++ b/tests/uptane_repo_generation/CMakeLists.txt
+@@ -1,4 +1,4 @@
+ add_custom_target(uptane_repo_full_no_correlation_id
+     COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/full_no_correlation_id.sh
+-    $<TARGET_FILE:aktualizr-repo> ${PROJECT_BINARY_DIR}/uptane_repos/full_no_correlation_id)
++    aktualizr-repo ${PROJECT_BINARY_DIR}/uptane_repos/full_no_correlation_id)
+ add_dependencies(uptane_repo_full_no_correlation_id aktualizr-repo)
+-- 
+2.17.1
+
