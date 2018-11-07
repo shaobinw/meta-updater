@@ -13,6 +13,8 @@ Previously, some older branches were also regularly supported, and while they sh
 
 If you are developing with meta-updater, it may be helpful to read the README and other documentation for link:README.adoc[this repo], https://github.com/advancedtelematic/aktualizr[aktualizr], and the https://github.com/advancedtelematic/updater-repo/[updater-repo], particularly the sections about development and debugging.
 
+Please sign a Developer Certificate of Origin (`--signoff` when committing) for all of your commits.
+
 == Contributor checklist
 
 * OTA-enabled build succeeds for at least one platform, the resulting image boots, and an update can be installed. This check is absolutely necessary for every pull request unless it only touches documentation.
